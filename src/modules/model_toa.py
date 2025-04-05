@@ -49,7 +49,7 @@ class ModelTOA:
                 if all(abs(period - periods[:i]) > self.__period_diff_threshold):
                     periods[i] = period
                     break
-        return periods
+        return np.sort(periods)
 
     def generate_toa(self) -> None:
         for i, period in enumerate(self.__period_array):
