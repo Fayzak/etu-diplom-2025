@@ -23,7 +23,7 @@ def evaluate_selector_params(
     reference_PRI = model.get_period_array()
 
     if len(reference_PRI) == 0:
-        return np.inf
+        return 10 ** 6
 
     min_freq = 1 / np.max(reference_PRI)
     max_freq = 1 / np.min(reference_PRI)
@@ -43,7 +43,7 @@ def evaluate_selector_params(
         )
         return quality_metric(reference_PRI, estimated_PRI)
     except:
-        return np.inf
+        return 10 ** 6
 
 
 def optimize_parameter(
@@ -54,8 +54,8 @@ def optimize_parameter(
 ) -> pd.DataFrame:
     """Байесовская оптимизация для одного параметра модели"""
     space = [
-        Real(0.01, 0.1, name="alpha_threshold"),
-        Real(0.05, 0.5, name="averaging_threshold"),
+        Real(0.1, 1.0, name="alpha_threshold"),
+        Real(0.1, 1.0, name="averaging_threshold"),
         Real(0.01, 0.1, name="freq_step"),
     ]
 
@@ -92,17 +92,17 @@ if __name__ == "__main__":
         "min_period": 0.5,
         "max_period": 2.0,
         "period_num": 3,
-        "period_diff_threshold": 0.1,
+        "period_diff_threshold": 0.05,
     }
 
     std_toa_results = optimize_parameter(
         "std_toa", np.linspace(0.1, 1.0, 5), fixed_params
     )
 
-    period_num_results = optimize_parameter("period_num", [2, 3, 4, 5], fixed_params)
+    period_num_results = optimize_parameter("period_num", [3, 6, 9, 12, 15], fixed_params)
 
     signal_loss_results = optimize_parameter(
-        "signal_loss_rate", np.linspace(0.0, 0.5, 5), fixed_params
+        "signal_loss_rate", np.linspace(0.1, 0.5, 5), fixed_params
     )
 
     print("Результаты для std_toa:")
