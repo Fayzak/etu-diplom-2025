@@ -1,7 +1,10 @@
 import numpy as np
 
 from modules.model_toa import ModelTOA
-from modules.parametric_signal_selection import ParametricSignalSelector
+from modules.parametric_signal_selection import (
+    ParametricSignalSelector,
+    FrequencyGridMode,
+)
 from modules.metric import quality_metric
 
 
@@ -23,15 +26,22 @@ if __name__ == "__main__":
     T = model_toa.get_T()
 
     parametric_signal_selector = ParametricSignalSelector(
-        T=T, min_freq=50, max_freq=1000, alpha_threshold=5e-1, averaging_threshold=5e-1
+        T=T,
+        min_freq=50,
+        max_freq=1000,
+        alpha_threshold=5e-1,
+        averaging_threshold=5e-1,
+        freq_step=1e-1,
     )
 
-    PRI = parametric_signal_selector.estimate_PRI(toa_array)
-    print(PRI)
+    estimated_PRI = parametric_signal_selector.estimate_PRI(
+        toa_array=toa_array, mode=FrequencyGridMode.LINEAR
+    )
+    print(estimated_PRI)
     print(np.sort(period_array))
     parametric_signal_selector.plot_signal_spectrum(
-        period_array=period_array, toa_array=toa_array
+        period_array=period_array, toa_array=toa_array, mode=FrequencyGridMode.LINEAR
     )
 
-    metric_result = quality_metric(period_array, PRI)
+    metric_result = quality_metric(period_array, estimated_PRI)
     print(metric_result)

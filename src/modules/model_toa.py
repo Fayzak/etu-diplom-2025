@@ -114,11 +114,11 @@ class ModelTOA:
                 color="w",
                 markerfacecolor=colors[i],
                 markersize=10,
-                label=f"Period {int(label)}",
+                label=f"Период {int(label)}",
             )
             for i, label in enumerate(unique_labels)
         ]
-        plt.legend(handles=legend_elements, title="Periods")
+        plt.legend(handles=legend_elements, title="Периоды")
 
         plt.grid()
         plt.show()
